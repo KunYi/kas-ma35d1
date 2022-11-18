@@ -1,0 +1,34 @@
+
+header:
+  version: 11
+
+defaults:
+  repos:
+    patches:
+      repo: kas-ma35d1
+
+repos:
+  sources/ma35d1-yocto:
+    url: https://github.com/OpenNuvoton/MA35D1_Yocto-v3.1.3
+    refspec: master
+    layers:
+      meta-ma35d1:
+    patches:
+      01-upgrade-pyinstaller:
+        path: patches/0001-upgrade-pyinstaller-version-to-v5.6.2.patch
+      02-update-depands-nuwriter:
+        path: patches/0002-update-DEPANDS-of-pyinstaller.patch
+      03-update-openssl-version:
+        path: patches/0003-update-to-openssl_1.1.1q.bbappend.patch
+      04-replace-openssl-to-native:
+        path: patches/0004-use-openssl-native-to-replace-host.patch
+      05-fixed-m4project-link-failed:
+        path: patches/0005-to-avoid-null-linkscript.patch
+      06-fixed-genimg.patch:
+        path: patches/0006-patch-genimg.patch
+      07-fixed-nuwrite-rdepends:
+        path: patches/0007-fixed-nuwrite-RDEPENDS-issues.patch
+      08-add-debug-img-sdcard:
+        path: patches/0008-add-debug-for-image-sdcard.patch
+
+  kas-ma35d1:

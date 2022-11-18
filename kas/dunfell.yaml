@@ -1,0 +1,41 @@
+
+header:
+  version: 11
+
+build_system: oe
+
+repos:
+  #sources/meta-arm:
+  #  url: git://git.yoctoproject.org/meta-arm
+  #  refspec: dunfell
+  #  layers:
+  #    meta-arm:
+  #    meta-arm-bsp:
+  #    meta-arm-toolchain:
+
+  sources/meta-virtualization:
+    url: git://git.yoctoproject.org/meta-virtualization
+    refspec: dunfell
+
+  sources/meta-qt5:
+    url: https://github.com/meta-qt5/meta-qt5
+    refspec: dunfell
+
+  sources/poky:
+    url: git://git.yoctoproject.org/poky
+    refspec: dunfell
+    layers:
+      meta:
+      meta-poky:
+#      meta-yocto-bsp:
+
+  sources/meta-openembedded:
+    url: https://github.com/openembedded/meta-openembedded
+    refspec: dunfell
+    layers:
+      meta-oe:
+      meta-multimedia:
+      meta-python:
+      meta-networking:
+      meta-filesystems:
+      meta-gnome:
