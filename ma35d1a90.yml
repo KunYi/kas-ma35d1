@@ -68,6 +68,12 @@ repos:
         path: patches/0004-use-openssl-native-to-replace-host.patch
       05-fixed-m4project-link-failed:
         path: patches/0005-to-avoid-null-linkscript.patch
+      06-fixed-genimg.patch:
+        path: patches/0006-patch-genimg.patch
+      07-fixed-nuwrite-rdepends:
+        path: patches/0007-fixed-nuwrite-RDEPENDS-issues.patch
+      08-add-debug-img-sdcard:
+        path: patches/0008-add-debug-for-image-sdcard.patch
 
   kas-ma35d1:
 

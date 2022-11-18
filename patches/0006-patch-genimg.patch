@@ -1,0 +1,44 @@
+diff --git a/meta-ma35d1/classes/image_types_nvt.bbclass b/meta-ma35d1/classes/image_types_nvt.bbclass
+index ff4e343..059fd1d 100644
+--- a/meta-ma35d1/classes/image_types_nvt.bbclass
++++ b/meta-ma35d1/classes/image_types_nvt.bbclass
+@@ -1,6 +1,6 @@
+ inherit image_types
+ 
+-DEPENDS = " python3-nuwriter-native gcc-arm-none-eabi-native"
++DEPENDS = " python3-nuwriter-native gcc-arm-none-eabi-native openssl-native parted-native"
+ 
+ IMAGE_TYPEDEP_nand = "ubi"
+ do_image_nand[depends] = "virtual/trusted-firmware-a:do_deploy \
+@@ -134,7 +134,7 @@ IMAGE_CMD_spinand() {
+              rm -rf $(date "+%m%d-*");)
+         fi
+     fi
+-} 
++}
+ 
+ IMAGE_CMD_nand() {
+     if [ -f ${DEPLOY_DIR_IMAGE}/${IMAGE_BASENAME}-${MACHINE}-enc-nand.pack ]; then
+@@ -242,11 +242,11 @@ IMAGE_ROOTFS_ALIGNMENT ?= "4096"
+ IMAGE_CMD_sdcard() {
+     BOOT_SPACE_ALIGNED=$(expr ${BOOT_SPACE} - 1 )
+     if [ -f ${DEPLOY_DIR_IMAGE}/${IMAGE_BASENAME}-${MACHINE}-enc-sdcard.pack ]; then
+-	rm ${DEPLOY_DIR_IMAGE}/header-${IMAGE_BASENAME}-${MACHINE}-enc-sdcard.bin -f
++	    rm ${DEPLOY_DIR_IMAGE}/header-${IMAGE_BASENAME}-${MACHINE}-enc-sdcard.bin -f
+         rm ${DEPLOY_DIR_IMAGE}/${IMAGE_BASENAME}-${MACHINE}-enc-sdcard.pack -f
+         rm ${DEPLOY_DIR_IMAGE}/pack-${IMAGE_BASENAME}-${MACHINE}-enc-sdcard.bin -f
+     elif [ -f ${DEPLOY_DIR_IMAGE}/${IMAGE_BASENAME}-${MACHINE}-sdcard.pack ]; then
+-	rm ${DEPLOY_DIR_IMAGE}/header-${IMAGE_BASENAME}-${MACHINE}-sdcard.bin -f
++	    rm ${DEPLOY_DIR_IMAGE}/header-${IMAGE_BASENAME}-${MACHINE}-sdcard.bin -f
+         rm ${DEPLOY_DIR_IMAGE}/${IMAGE_BASENAME}-${MACHINE}-sdcard.pack -f
+         rm ${DEPLOY_DIR_IMAGE}/pack-${IMAGE_BASENAME}-${MACHINE}-sdcard.bin -f
+     fi
+@@ -356,7 +356,7 @@ IMAGE_CMD_sdcard() {
+             dd if=${DEPLOY_DIR_IMAGE}/bl2-ma35d1.bin of=${SDCARD} conv=notrunc seek=384 bs=512
+         else
+             # 0x400
+-        dd if=${DEPLOY_DIR_IMAGE}/header-${IMAGE_BASENAME}-${MACHINE}-enc-sdcard.bin of=${SDCARD} conv=notrunc seek=2 bs=512
++            dd if=${DEPLOY_DIR_IMAGE}/header-${IMAGE_BASENAME}-${MACHINE}-enc-sdcard.bin of=${SDCARD} conv=notrunc seek=2 bs=512
+             # 0x20000
+             dd if=${DEPLOY_DIR_IMAGE}/enc_bl2-ma35d1-sdcard.dtb of=${SDCARD} conv=notrunc seek=256 bs=512
+             # 0x30000

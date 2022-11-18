@@ -1,0 +1,123 @@
+diff --git a/meta-ma35d1/classes/image_types_nvt.bbclass b/meta-ma35d1/classes/image_types_nvt.bbclass
+index 059fd1d..8820089 100644
+--- a/meta-ma35d1/classes/image_types_nvt.bbclass
++++ b/meta-ma35d1/classes/image_types_nvt.bbclass
+@@ -242,10 +242,13 @@ IMAGE_ROOTFS_ALIGNMENT ?= "4096"
+ IMAGE_CMD_sdcard() {
+     BOOT_SPACE_ALIGNED=$(expr ${BOOT_SPACE} - 1 )
+     if [ -f ${DEPLOY_DIR_IMAGE}/${IMAGE_BASENAME}-${MACHINE}-enc-sdcard.pack ]; then
++        echo "rm older enc-sdcard.pack (secure boot)"
+ 	    rm ${DEPLOY_DIR_IMAGE}/header-${IMAGE_BASENAME}-${MACHINE}-enc-sdcard.bin -f
+         rm ${DEPLOY_DIR_IMAGE}/${IMAGE_BASENAME}-${MACHINE}-enc-sdcard.pack -f
+         rm ${DEPLOY_DIR_IMAGE}/pack-${IMAGE_BASENAME}-${MACHINE}-enc-sdcard.bin -f
++
+     elif [ -f ${DEPLOY_DIR_IMAGE}/${IMAGE_BASENAME}-${MACHINE}-sdcard.pack ]; then
++        echo "rm older -sdcard.pack (insecure boot)"
+ 	    rm ${DEPLOY_DIR_IMAGE}/header-${IMAGE_BASENAME}-${MACHINE}-sdcard.bin -f
+         rm ${DEPLOY_DIR_IMAGE}/${IMAGE_BASENAME}-${MACHINE}-sdcard.pack -f
+         rm ${DEPLOY_DIR_IMAGE}/pack-${IMAGE_BASENAME}-${MACHINE}-sdcard.bin -f
+@@ -254,6 +257,7 @@ IMAGE_CMD_sdcard() {
+     # Generate the FIP image  with the bl2.bin and required Device Tree
+     if ${@bb.utils.contains('MACHINE_FEATURES', 'optee', 'true', 'false', d)}; then
+         if [ "${TFA_LOAD_M4}" = "no" ]; then
++            echo 'FIP image with optee - TFA_LOAD_M4 = no'
+             ${DEPLOY_DIR_IMAGE}/fiptool create \
+                 --soc-fw ${DEPLOY_DIR_IMAGE}/bl31-${TFA_PLATFORM}.bin \
+                 --tos-fw ${DEPLOY_DIR_IMAGE}/tee-header_v2-optee.bin \
+@@ -261,6 +265,7 @@ IMAGE_CMD_sdcard() {
+                 --nt-fw ${DEPLOY_DIR_IMAGE}/u-boot.bin-sdcard \
+                 ${DEPLOY_DIR_IMAGE}/fip_with_optee-${IMAGE_BASENAME}-${MACHINE}.bin-sdcard
+         else
++           echo 'FIP image with optee - TFA_LOAD_M4 != no'
+            if [ -f ${DEPLOY_DIR_IMAGE}/${TFA_M4_BIN} ]; then
+                ${DEPLOY_DIR_IMAGE}/fiptool create \
+                     --scp-fw ${DEPLOY_DIR_IMAGE}/${TFA_M4_BIN} \
+@@ -276,11 +281,13 @@ IMAGE_CMD_sdcard() {
+         (cd ${DEPLOY_DIR_IMAGE}; ln -sf fip_with_optee-${IMAGE_BASENAME}-${MACHINE}.bin-sdcard fip.bin-sdcard)
+     else
+         if [ "${TFA_LOAD_M4}" = "no" ]; then
++            echo 'FIP image without optee - TFA_LOAD_M4 = no'
+             ${DEPLOY_DIR_IMAGE}/fiptool create \
+                 --soc-fw ${DEPLOY_DIR_IMAGE}/bl31-${TFA_PLATFORM}.bin \
+                 --nt-fw ${DEPLOY_DIR_IMAGE}/u-boot.bin-sdcard \
+                 ${DEPLOY_DIR_IMAGE}/fip_without_optee-${IMAGE_BASENAME}-${MACHINE}.bin-sdcard
+         else
++            echo 'FIP image without optee - TFA_LOAD_M4 != no'
+             if [ -f ${DEPLOY_DIR_IMAGE}/${TFA_M4_BIN} ]; then
+                 ${DEPLOY_DIR_IMAGE}/fiptool create \
+                     --scp-fw ${DEPLOY_DIR_IMAGE}/${TFA_M4_BIN} \
+@@ -295,17 +302,20 @@ IMAGE_CMD_sdcard() {
+     fi
+ 
+     if [ -f ${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.ext4 ]; then
++        echo 'process ${IMAGE_NAME}.rootfs.ext4'
+         SDCARD_SIZE=$(expr ${BOOT_SPACE_ALIGNED} \+ ${IMAGE_ROOTFS_ALIGNMENT} \+ $ROOTFS_SIZE \+ ${IMAGE_ROOTFS_ALIGNMENT})
+         # Initialize a sparse file
+-        dd if=/dev/zero of=${SDCARD} bs=1 count=0 seek=$(expr 1024 \* ${SDCARD_SIZE})
++        dd if=/dev/zero of=${SDCARD} bs=1k count=${SDCARD_SIZE}
+         parted -s ${SDCARD} mklabel msdos
+         parted -s ${SDCARD} unit KiB mkpart primary $(expr ${BOOT_SPACE_ALIGNED} \+ ${IMAGE_ROOTFS_ALIGNMENT}) $(expr ${BOOT_SPACE_ALIGNED} \+ ${IMAGE_ROOTFS_ALIGNMENT} \+ $ROOTFS_SIZE )
+         parted ${SDCARD} print
+ 
+         # MBR table for nuwriter
+-        dd if=/dev/zero of=${DEPLOY_DIR_IMAGE}/MBR.scdard.bin bs=1 count=0 seek=512
++        dd if=/dev/zero of=${DEPLOY_DIR_IMAGE}/MBR.scdard.bin bs=512 count=1
+         dd if=${SDCARD} of=${DEPLOY_DIR_IMAGE}/MBR.scdard.bin conv=notrunc seek=0 count=1 bs=512
++        echo "generation MBR.sdcard.bin from ${SDCARD}"
+         if [ "${SECURE_BOOT}" = "no" ]; then
++           echo "SECURE_BOOT = no"
+            (cd ${DEPLOY_DIR_IMAGE}; \
+             cp ${NUWRITER_DIR}/*-sdcard.json  nuwriter; \
+             ln -sf ${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.ext4 rootfs.ext4-sdcard; \
+@@ -317,12 +327,15 @@ IMAGE_CMD_sdcard() {
+             nuwriter/nuwriter -p nuwriter/pack-sdcard.json; \
+             cp pack/pack.bin pack-${IMAGE_BASENAME}-${MACHINE}-sdcard.bin; \
+             ln -sf pack-${IMAGE_BASENAME}-${MACHINE}-sdcard.bin ${IMAGE_BASENAME}-${MACHINE}-sdcard.pack; \
+-            rm -rf $(date "+%m%d-*");)
++            rm -rf $(date "+%m%d-*"); \
++            echo "rm $(date '+%m%d-*')"; \
++           )
+             if [ -f ${DEPLOY_DIR_IMAGE}/enc_bl2-ma35d1-sdcard.dtb ]; then
+                 rm ${DEPLOY_DIR_IMAGE}/enc_bl2-ma35d1-sdcard.dtb
+                 rm ${DEPLOY_DIR_IMAGE}/enc_bl2-ma35d1-sdcard.bin
+             fi
+         else
++           echo "SECURE_BOOT != no"
+            (cd ${DEPLOY_DIR_IMAGE}; \
+             ln -sf ${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.ext4 rootfs.ext4-sdcard; \
+             $(cat ${NUWRITER_DIR}/header-sdcard.json | jq -r ".header.secureboot = \"yes\"" | \
+@@ -344,10 +357,13 @@ IMAGE_CMD_sdcard() {
+             nuwriter/nuwriter -p nuwriter/pack-sdcard.json; \
+             cp pack/pack.bin pack-${IMAGE_BASENAME}-${MACHINE}-enc-sdcard.bin; \
+             ln -sf pack-${IMAGE_BASENAME}-${MACHINE}-enc-sdcard.bin ${IMAGE_BASENAME}-${MACHINE}-enc-sdcard.pack; \
+-            rm -rf $(date "+%m%d-*");)
++            rm -rf $(date "+%m%d-*"); \
++            echo "rm $(date '+%m%d-')"; \
++           )
+         fi
+ 
+         if [ "${SECURE_BOOT}" = "no" ]; then
++            echo "write bl2 dtb and bin onto sdcard(without secureboot)"
+             # 0x400
+             dd if=${DEPLOY_DIR_IMAGE}/header-${IMAGE_BASENAME}-${MACHINE}-sdcard.bin of=${SDCARD} conv=notrunc seek=2 bs=512
+             # 0x20000
+@@ -355,6 +371,7 @@ IMAGE_CMD_sdcard() {
+             # 0x30000
+             dd if=${DEPLOY_DIR_IMAGE}/bl2-ma35d1.bin of=${SDCARD} conv=notrunc seek=384 bs=512
+         else
++            echo "write bl2 dtb and bin onto sdcard(with secureboot)"
+             # 0x400
+             dd if=${DEPLOY_DIR_IMAGE}/header-${IMAGE_BASENAME}-${MACHINE}-enc-sdcard.bin of=${SDCARD} conv=notrunc seek=2 bs=512
+             # 0x20000
+@@ -371,7 +388,9 @@ IMAGE_CMD_sdcard() {
+         # 0x300000
+         dd if=${DEPLOY_DIR_IMAGE}/Image-${MACHINE}.bin of=${SDCARD} conv=notrunc seek=6144 bs=512
+         # root fs
+-        dd if=${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.ext4 of=${SDCARD} conv=notrunc,fsync seek=1 bs=$(expr ${BOOT_SPACE_ALIGNED} \* 1024 + ${IMAGE_ROOTFS_ALIGNMENT} \* 1024)
++        dd if=${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.ext4 of=${SDCARD} conv=notrunc,fsync bs=1k seek=$(expr ${BOOT_SPACE_ALIGNED} + ${IMAGE_ROOTFS_ALIGNMENT})
++        echo "complete rootfs.ext4 to write onto ${SDCARD}"
++    else
++        echo "Could not found ${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.ext4"
+     fi
+ }
+-

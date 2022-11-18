@@ -1,0 +1,21 @@
+diff --git a/meta-ma35d1/recipes-devtools/python/python3-nuwriter_0.90.0.bb b/meta-ma35d1/recipes-devtools/python/python3-nuwriter_0.90.0.bb
+index 701dbfc..cb45a5c 100644
+--- a/meta-ma35d1/recipes-devtools/python/python3-nuwriter_0.90.0.bb
++++ b/meta-ma35d1/recipes-devtools/python/python3-nuwriter_0.90.0.bb
+@@ -21,6 +21,16 @@ SRC_URI += " file://header-nand.json \
+              file://pack-spinand.json \
+            "
+ 
++RDEPENDS += " \
++    python3-pyusb-native \
++    python3-pycryptodome-native \
++    python3-crcmod-native \
++    python3-tqdm-native \
++    python3-ecdsa-native \
++    python3-six-native \
++    jq-native \
++    "
++
+ DEPENDS += " \
+     libusb1-native \
+     python3-native \
