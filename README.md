@@ -172,3 +172,12 @@ Example, micro sd card on /dev/**sdx**, you need replace **sdx** to your device 
 $ sudo umount /dev/sdx*   # to umount all partition of sdcard
 $ sudo bmaptool copy --nobmap ./build/tmp-glibc/deploy/images/numaker-iot-ma35d16f90/core-image-minimal-numaker-iot-ma35d16f90.sdcard  /dev/sdx # flash image onto sdcard
 ```
+
+build nvt-image-qt5
+===
+just concatenation **kas/target/target-nvt-qt5.yaml** for change target to **nvt-image-qt5**
+
+Example
+```
+./kas-container build numarker-iot-ma35d1-a1.yaml:kas/target-nvt-qt5.yaml
+```
