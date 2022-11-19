@@ -156,3 +156,19 @@ NOTE: Executing Tasks
 NOTE: Tasks Summary: Attempted 2225 tasks of which 2225 didn't need to be rerun and all succeeded.
 
 ```
+
+How to verify image booting
+===
+
+use [bmaptool](https://github.com/intel/bmap-tools) to flash micro sd card for sdcard booting test
+
+install **bmaptool** on **Debina/Ubuntu** distribution
+```
+$ sudo apt update && sudo apt install bmaptool
+```
+
+Example, micro sd card on /dev/**sdx**, you need replace **sdx** to your device name
+```
+$ sudo umount /dev/sdx*   # to umount all partition of sdcard
+$ sudo bmaptool copy --nobmap ./build/tmp-glibc/deploy/images/numaker-iot-ma35d16f90/core-image-minimal-numaker-iot-ma35d16f90.sdcard  /dev/sdx # flash image onto sdcard
+```
