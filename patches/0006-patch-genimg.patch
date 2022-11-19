@@ -6,7 +6,7 @@ index ff4e343..059fd1d 100644
  inherit image_types
  
 -DEPENDS = " python3-nuwriter-native gcc-arm-none-eabi-native"
-+DEPENDS = " python3-nuwriter-native gcc-arm-none-eabi-native openssl-native parted-native"
++DEPENDS = " python3-nuwriter-native gcc-arm-none-eabi-native openssl-native"
  
  IMAGE_TYPEDEP_nand = "ubi"
  do_image_nand[depends] = "virtual/trusted-firmware-a:do_deploy \

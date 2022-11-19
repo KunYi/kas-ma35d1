@@ -30,5 +30,9 @@ repos:
         path: patches/0007-fixed-nuwrite-RDEPENDS-issues.patch
       08-add-debug-img-sdcard:
         path: patches/0008-add-debug-for-image-sdcard.patch
+      09-update-nu-eclipse:
+        path: patches/0009-update-nu-eclipse-native-to-v1.02.019.patch
+      10-fixed-missed-nand-ubi-init-env:
+        path: patches/0010-fixed-bootloader-missed-nand-ubi.patch
 
   kas-ma35d1:
