@@ -1,4 +1,4 @@
-Nuvoton MA35D1 development to use [kas](github.com/siemens/kas)
+Nuvoton MA35D1 development to use [kas](https://github.com/siemens/kas)
 ===
 
 use the below command for build 'core-image-minimal' image for [Numaker-IoT-MA35D1-A1](https://www.nuvoton.com/products/iot-solution/iot-platform/numaker-iot-ma35d1-a1/)
