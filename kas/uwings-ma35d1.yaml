@@ -1,0 +1,17 @@
+
+header:
+  version: 11
+
+defaults:
+  repos:
+    patches:
+      repo: kas-ma35d1
+
+repos:
+  sources/ma35d1-yocto:
+    url: https://github.com/UWINGS-KUNYI/MA35D1_Yocto.git
+    refspec: dunfell
+    layers:
+      meta-ma35d1:
+
+  kas-ma35d1:
