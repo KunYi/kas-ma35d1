@@ -1,0 +1,18 @@
+From 47382d4cbd75f6bd5b315e770f53ce3e5750a188 Mon Sep 17 00:00:00 2001
+From: kas <kas@example.com>
+Date: Thu, 17 Nov 2022 10:41:17 +0000
+Subject: [PATCH 3/5] update to openssl_%.bbappend
+
+we need new version for latest dunfell
+---
+ .../openssl/{openssl_1.1.1k.bbappend => openssl_%.bbappend}  | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename meta-ma35d1/recipes-security/openssl/{openssl_1.1.1k.bbappend => openssl_%.bbappend} (100%)
+
+diff --git a/meta-ma35d1/recipes-security/openssl/openssl_1.1.1k.bbappend b/meta-ma35d1/recipes-security/openssl/openssl_%.bbappend
+similarity index 100%
+rename from meta-ma35d1/recipes-security/openssl/openssl_1.1.1k.bbappend
+rename to meta-ma35d1/recipes-security/openssl/openssl_%.bbappend
+--
+2.38.1
+
