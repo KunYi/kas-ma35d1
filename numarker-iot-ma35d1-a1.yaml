@@ -3,14 +3,14 @@ header:
   version: 11
 
   includes:
-    - kas/dunfell.yaml
-    - kas/repos-ma35d1.yaml
+    - kas/kirkstone.yaml
+    - kas/uwings-ma35d1.yaml
     - kas/machine-ma35d16f90.yaml
     - kas/distro-nvt-ma35d1-directfb.yaml
 
 local_conf_header:
   base: |
-    CONF_VERSION = "1"
+    CONF_VERSION = "2"
     PACKAGE_CLASSES = "package_ipk"
     LICENSE_FLAGS_ACCEPTED += "armcompiler"
     BB_NUMBER_THREADS ?= "8"
@@ -23,7 +23,7 @@ local_conf_header:
   root_password: |
     USERS += "root"
   machine_feature: |
-    MACHINE_FEATURES_append = " optee "
+    MACHINE_FEATURES:append = " optee "
 # image_feature: |
 #   DISTRO_FEATURES:append = ""
   debug_feature: |

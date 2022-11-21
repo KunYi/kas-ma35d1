@@ -10,7 +10,7 @@ defaults:
 repos:
   sources/ma35d1-yocto:
     url: https://github.com/UWINGS-KUNYI/MA35D1_Yocto.git
-    refspec: dunfell
+    refspec: kirkstone
     layers:
       meta-ma35d1:
 
