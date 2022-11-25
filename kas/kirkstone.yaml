@@ -5,13 +5,13 @@ header:
 build_system: oe
 
 repos:
-  #sources/meta-arm:
-  #  url: git://git.yoctoproject.org/meta-arm
-  #  refspec: kirkstone
-  #  layers:
-  #    meta-arm:
-  #    meta-arm-bsp:
-  #    meta-arm-toolchain:
+  sources/meta-arm:
+    url: git://git.yoctoproject.org/meta-arm
+    refspec: kirkstone
+    layers:
+      meta-arm:
+      meta-arm-bsp:
+      meta-arm-toolchain:
 
   sources/meta-virtualization:
     url: git://git.yoctoproject.org/meta-virtualization
